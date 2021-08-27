@@ -1,7 +1,12 @@
 var inquirer = require('inquirer');
 inquirer
   .prompt([
-    /* Pass your questions in here */
+    {
+        name: "What would like to do?",
+        type:"list",
+        choices:["view all departments","view all roles","view all employees","add a department","add a role","add an employee","update an employee role"]
+
+}
   ])
   .then((answers) => {
     // Use user feedback for... whatever!!
@@ -15,7 +20,7 @@ inquirer
   });
 
   // get the client
-const mysql = require('mysql2');
+/const mysql = require('mysql2');
 
 // create the connection to database
 const connection = mysql.createConnection({
