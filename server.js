@@ -10,7 +10,17 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+// creating database
 
+const database = mysql.createConnection(
+  {
+    host: 'localhost',
+    user: 'root',
+    password: 'Neuralink369',
+    database: 'Employee_Tracker_db'
+  },
+  console.log(`Connection to database established!`)
+)
 
 inquirer
   .prompt([
