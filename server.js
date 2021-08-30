@@ -85,5 +85,31 @@ function userInterface() {
       queriesDb.addDepartment(action.departmrnt_name, userInterface);
   });
 }
-    
+    // using asynchronus functions
+
+    async function RoleInfo() {
+      const departmentChoices = await queriesDb.getDepartmentChoices();
+      inquirer
+        .prompt([
+        {
+          type: 'input',
+          message: "What do you want to rename the new role to?",
+          name: 'title',
+        },
+        {
+          type: 'input',
+          message: "What is the new role's calculated salary?",
+          name: 'salary',
+        },
+        {
+          type: 'list',
+          message: "Which department is the new role part of?",
+          choices: departmentChoices,
+          name: 'department',
+        },
+      ])
+        .then((action) => {
+          queriesDb.addRole(action.title, action.salary, action.department, chooseAction);
+      });
+    }
 
