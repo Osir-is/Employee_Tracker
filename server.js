@@ -28,8 +28,9 @@ function userInterface() {
   inquirer
     .prompt([
       {
-        name: "What would like to do?",
         type: "list",
+        name:"UI",
+        message:"What would you like to do?",
         choices: [
           "view all departments",
           "view all roles",
@@ -44,7 +45,7 @@ function userInterface() {
     ])
     .then((answers) => {
       // Use user feedback for... whatever!!
-      switch (answers.action) {
+      switch (answers.UI) {
         case "View all departments": 
           queries.viewDepartments(userInterface);
           break;
@@ -69,12 +70,20 @@ function userInterface() {
         default: 
           database.end();
       }
-    })
-    .catch((error) => {
-      if (error.isTtyError) {
-        // Prompt couldn't be rendered in the current environment
-      } else {
-        // Something else went wrong
-      }
     });
+  }
+
+  function departmentInfo(){
+    inquirer.prompt([
+      {
+        type:'input',
+        message:'Rename the department ?',
+        name:'department_name',
+      }
+    ])
+    then((action) => {
+      queriesDb.addDepartment(action.departmrnt_name, userInterface);
+  });
 }
+    
+
