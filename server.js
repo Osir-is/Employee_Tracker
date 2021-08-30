@@ -142,7 +142,7 @@ function userInterface() {
         },
       ])
         .then((action) => {
-          queries.addEmployee(
+          queriesDb.addEmployee(
             action.firstName, 
             action.lastName, 
             action.role,
@@ -151,3 +151,31 @@ function userInterface() {
           );
       });
     }
+    // asyn function to update current employee role & info
+    async function UpdatedEmployeeInfo() {
+      const roleChoices = await queriesDb.getRoleChoices();
+      const employeeChoices = await queriesDb.getEmployeeChoices();
+      inquirer
+        .prompt([
+        {
+          type: 'list',
+          message: "Please select employee role you wish to update?",
+          choices: employeeChoices,
+          name: 'employee',
+        },
+        {
+          type: 'list',
+          message: "please select new role to assign to employee",
+          choices: roleChoices,
+          name: 'role',
+        },
+      ])
+        .then((action) => {
+          queriesDb.updateEmployee(
+            action.employee, 
+            action.role, 
+            chooseAction
+            );
+      });
+    }
+userInterface();
