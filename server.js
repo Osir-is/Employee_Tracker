@@ -85,7 +85,7 @@ function userInterface() {
       queriesDb.addDepartment(action.departmrnt_name, userInterface);
   });
 }
-    // using asynchronus functions
+    // using asynchronus functions to change role info
 
     async function RoleInfo() {
       const departmentChoices = await queriesDb.getDepartmentChoices();
@@ -112,4 +112,42 @@ function userInterface() {
           queriesDb.addRole(action.title, action.salary, action.department, chooseAction);
       });
     }
-
+    // a new asynchronus function to update employees info
+    async function employeeInfo() {
+      const roleChoices = await queriesDb.getRoleChoices();
+      const managerChoices = await queriesDb.getEmployeeChoices();
+      inquirer
+        .prompt([
+        {
+          type: 'input',
+          message: "please input the new employee's first name?",
+          name: 'firstName',
+        },
+        {
+          type: 'input',
+          message: "please input the new employee's last name?",
+          name: 'lastName',
+        },
+        {
+          type: 'list',
+          message: "please specify the new employee's role?",
+          choices: roleChoices,
+          name: 'role',
+        },
+        {
+          type: 'list',
+          message: "please specify the new employee's manager?",
+          choices: managerChoices,
+          name: 'manager',
+        },
+      ])
+        .then((action) => {
+          queries.addEmployee(
+            action.firstName, 
+            action.lastName, 
+            action.role,
+            action.manager, 
+            chooseAction
+          );
+      });
+    }
