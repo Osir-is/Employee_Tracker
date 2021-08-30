@@ -4,6 +4,7 @@ const mysql = require("mysql2");
 const express = require("express");
 const consoleTable = require("console.table");
 const Query = require("mysql2/typings/mysql/lib/protocol/sequences/Query");
+const { request, response } = require("express");
 // added in middleware
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -178,4 +179,9 @@ function userInterface() {
             );
       });
     }
+
+    // error message
+    app.use((request,response) => {
+      response.status(404).end()
+    });
 userInterface();
