@@ -1,16 +1,10 @@
 // added in required varaibles
 const inquirer = require("inquirer");
 const mysql = require("mysql2");
-const express = require("express");
 const consoleTable = require("console.table");
-const Query = require("mysql2/typings/mysql/lib/protocol/sequences/Query");
-const { request, response } = require("express");
+const Query = require("./library/Query.js");
 // added in middleware
 const PORT = process.env.PORT || 3001;
-const app = express();
-
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
 
 // creating database
 
@@ -24,7 +18,7 @@ const database = mysql.createConnection(
   console.log(`Connection to database established!`)
 );
 
-const queriesDb = new Queries(database);
+const queryDb = new Query(database);
 function userInterface() {
   inquirer
     .prompt([
@@ -45,28 +39,29 @@ function userInterface() {
       },
     ])
     .then((answers) => {
+      console.log(answers)
       // Use user feedback for... whatever!!
       switch (answers.UI) {
-        case "View all departments":
-          queries.viewDepartments(userInterface);
+        case "view all departments":
+          queryDb.viewDepartments(userInterface);
           break;
-        case "View all roles":
-          queries.viewRoles(userInterface);
+        case "view all roles":
+          queryDb.viewRoles(userInterface);
           break;
-        case "View all employees":
-          queries.viewEmployees(userInterface);
+        case "view all employees":
+          queryDb.viewEmployees(userInterface);
           break;
-        case "Add a department":
-          getDepartmentInfo();
+        case "add a department":
+          departmentInfo();
           break;
-        case "Add a role":
-          getRoleInfo();
+        case "add a role":
+          RoleInfo();
           break;
-        case "Add an employee":
-          getEmployeeInfo();
+        case "add an employee":
+          employeeInfo();
           break;
-        case "Update an employee role":
-          getUpdatedEmployeeInfo();
+        case "update an employee role":
+        UpdatedEmployeeInfo();
           break;
         default:
           database.end();
@@ -83,13 +78,13 @@ function departmentInfo() {
     },
   ]);
   then((action) => {
-    queriesDb.addDepartment(action.departmrnt_name, userInterface);
+    queryDb.addDepartment(action.departmrnt_name, userInterface);
   });
 }
 // using asynchronus functions to change role info
 
 async function RoleInfo() {
-  const departmentChoices = await queriesDb.getDepartmentChoices();
+  const departmentChoices = await queryDb.getDepartmentChoices();
   inquirer
     .prompt([
       {
@@ -110,18 +105,21 @@ async function RoleInfo() {
       },
     ])
     .then((action) => {
-      queriesDb.addRole(
+      console.log(action)
+      queryDb.addRole(
         action.title,
         action.salary,
         action.department,
-        chooseAction
+        userInterface
       );
     });
 }
 // a new asynchronus function to update employees info
 async function employeeInfo() {
-  const roleChoices = await queriesDb.getRoleChoices();
-  const managerChoices = await queriesDb.getEmployeeChoices();
+  const roleChoices = await queryDb.getRoleChoices();
+  const managerChoices = await queryDb.getEmployeeChoices();
+  console.log(roleChoices)
+  console.log(managerChoices)
   inquirer
     .prompt([
       {
@@ -148,19 +146,19 @@ async function employeeInfo() {
       },
     ])
     .then((action) => {
-      queriesDb.addEmployee(
+      queryDb.addEmployee(
         action.firstName,
         action.lastName,
         action.role,
         action.manager,
-        chooseAction
+        userInterface
       );
     });
 }
 // asyn function to update current employee role & info
 async function UpdatedEmployeeInfo() {
-  const roleChoices = await queriesDb.getRoleChoices();
-  const employeeChoices = await queriesDb.getEmployeeChoices();
+  const roleChoices = await queryDb.getRoleChoices();
+  const employeeChoices = await queryDb.getEmployeeChoices();
   inquirer
     .prompt([
       {
@@ -177,12 +175,10 @@ async function UpdatedEmployeeInfo() {
       },
     ])
     .then((action) => {
-      queriesDb.updateEmployee(action.employee, action.role, chooseAction);
+      queryDb.updateEmployee(action.employee, action.role, userInterface);
     });
 }
 
 // error message
-app.use((request, response) => {
-  response.status(404).end();
-});
+
 userInterface();
