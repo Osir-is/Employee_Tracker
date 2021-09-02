@@ -31,10 +31,10 @@ https://drive.google.com/file/d/1ja1G7-UU-VkCITL73Q9WOrg-kNWtoNSz/view
 ![image](https://user-images.githubusercontent.com/78626961/131928013-83c96661-c0cd-49c3-a794-cd711b4e2fa1.png)
 
 ## Environment
-JavaScript
-Node.js
-Inquirer
-MySQL
+- JavaScript
+- Node.js
+- Inquirer
+- MySQL
 
 ## Contributors
 - Feras Faid
